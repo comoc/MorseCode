@@ -229,7 +229,7 @@ const int* MorseCodec::getPattern(char c, size_t* length)
     if (it == dictionary.end()) {
         if (length != 0)
             *length = 0;
-        return NULL;
+        return 0;
     }
     if (length != 0)
         *length = (*it).second.length;
