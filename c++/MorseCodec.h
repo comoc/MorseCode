@@ -15,7 +15,7 @@ public:
     class Decoder {
     private:
         int64_t upstrokeTime;
-        int downstrokeTime;
+        int64_t downstrokeTime;
         bool hlPrev;
         std::vector<int64_t> queue;
         static const float TOLERANCE;
