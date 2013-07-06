@@ -20,6 +20,9 @@ static final int TIMEOUT = 2000;
 String newStr = "";
 String curStr = MESSAGE;
 
+MorseCodec.Decoder dec = new MorseCodec.Decoder();
+String decodedStr = "";
+
 void setup() {
 // { NOT ANDROID  
   size(640, 480);
@@ -61,6 +64,7 @@ void draw() {
 
   if (codes != null && codes.size() > 0) {
     Integer p = (Integer)codes.get(codesCounter);
+
     if (p != null) {
       if (p != 0) {
         fill(255);
@@ -77,8 +81,14 @@ void draw() {
 // } NOT ANDROID  
       }
     }
+    
+    String result = dec.process((p != null) && (p != 0));
+    if (result != null)
+      decodedStr = result;
+    text("Decoded result:" + decodedStr, 10, 45);
+    
     int dt = now - lastTime;
-    if (dt > 100) {
+    if (dt > 80) {
       codesCounter = (codesCounter + 1) % codes.size();
       lastTime = now;
     }

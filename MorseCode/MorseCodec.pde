@@ -1,3 +1,7 @@
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Iterator;
+
 static class MorseCodec {
   static final int[] A = {
     1, 3
@@ -140,105 +144,77 @@ static class MorseCodec {
   static final int[] SPACE = {
     1, 1, 1, 1, 1, 1
   };
+  
+  static HashMap dictionary;
+
+  static void initializeDictionary() {
+    if (dictionary != null)
+      return;
+    dictionary = new HashMap();
+    dictionary.put('A', A);
+    dictionary.put('B', B);
+    dictionary.put('C', C);
+    dictionary.put('D', D);
+    dictionary.put('E', E);
+    dictionary.put('F', F);
+    dictionary.put('G', G);
+    dictionary.put('H', H);
+    dictionary.put('I', I);
+    dictionary.put('J', J);
+    dictionary.put('K', K);
+    dictionary.put('L', L);
+    dictionary.put('M', M);
+    dictionary.put('N', N);
+    dictionary.put('O', O);
+    dictionary.put('P', P);
+    dictionary.put('Q', Q);
+    dictionary.put('R', R);
+    dictionary.put('S', S);
+    dictionary.put('T', T);
+    dictionary.put('U', U);
+    dictionary.put('V', V);
+    dictionary.put('W', W);
+    dictionary.put('X', X);
+    dictionary.put('Y', Y);
+    dictionary.put('Z', Z);
+    dictionary.put('1', _1);
+    dictionary.put('2', _2);
+    dictionary.put('3', _3);
+    dictionary.put('4', _4);
+    dictionary.put('5', _5);
+    dictionary.put('6', _6);
+    dictionary.put('7', _7);
+    dictionary.put('8', _8);
+    dictionary.put('9', _9);
+    dictionary.put('0', _0);
+    dictionary.put('.', PERIOD);
+    dictionary.put(',', COMMA);
+    dictionary.put('?', QUESTION);
+    dictionary.put('!', EXCLAMATION);
+    dictionary.put('-', HYPHEN);
+    dictionary.put('/', SLASH);
+    dictionary.put('@', AT);
+    dictionary.put('(', OPEN_BLACKET);
+    dictionary.put(')', CLOSE_BLACKET);
+    dictionary.put(' ', SPACE);
+  }
+  
+  static final char getCharacter(int[] a) {
+    initializeDictionary();
+    for (Iterator it = dictionary.entrySet().iterator(); it.hasNext();) {
+      Map.Entry entry = (Map.Entry)it.next();    
+      char c = (Character)entry.getKey();
+      int[] s = (int[])entry.getValue();
+      if (Arrays.equals(a, s)) {
+        return c;
+      }
+    }
+    return 0;
+  }
 
   static final int[] getPattern(char c) {
-    switch (c) {
-    case 'A': 
-      return A;
-    case 'B': 
-      return B;
-    case 'C': 
-      return C;
-    case 'D': 
-      return D;
-    case 'E': 
-      return E;
-    case 'F': 
-      return F;
-    case 'G': 
-      return G;
-    case 'H': 
-      return H;
-    case 'I': 
-      return I;
-    case 'J': 
-      return J;
-    case 'K': 
-      return K;
-    case 'L': 
-      return L;
-    case 'M': 
-      return M;
-    case 'N': 
-      return N;
-    case 'O': 
-      return O;
-    case 'P': 
-      return P;
-    case 'Q': 
-      return Q;
-    case 'R': 
-      return R;
-    case 'S': 
-      return S;
-    case 'T': 
-      return T;
-    case 'U': 
-      return U;
-    case 'V': 
-      return V;
-    case 'W': 
-      return W;
-    case 'X': 
-      return X;
-    case 'Y': 
-      return Y;
-    case 'Z': 
-      return Z;
-
-    case '1': 
-      return _1;
-    case '2': 
-      return _2;
-    case '3': 
-      return _3;
-    case '4': 
-      return _4;
-    case '5': 
-      return _5;
-    case '6': 
-      return _6;
-    case '7': 
-      return _7;
-    case '8': 
-      return _8;
-    case '9': 
-      return _9;
-    case '0': 
-      return _0;
-    case '.': 
-      return PERIOD;
-    case ':': 
-      return COMMA;
-    case '?': 
-      return QUESTION;
-    case '!': 
-      return EXCLAMATION;
-    case '-':
-      return HYPHEN;
-    case '/': 
-      return SLASH;
-    case '@': 
-      return AT;
-    case '(': 
-      return OPEN_BLACKET;
-    case ')': 
-      return CLOSE_BLACKET;
-    case ' ': 
-      return SPACE;
-    default:
-      return null;
-    }
+    initializeDictionary();
+    return (int[])dictionary.get(c);
   }
 
   static ArrayList encode(String s) {
@@ -262,27 +238,106 @@ static class MorseCodec {
       c.add(0);
       c.add(0);
     }
+
     return c;
   }
-  
+
+  static Decoder createDecoder() {
+    return new Decoder();
+  }
+
   static class Decoder {
-    int dotLen;
+    long upstrokeTime;
+    long downstrokeTime;
     boolean hlPrev;
-    ArrayList beforePrediction;
-    Decoder() {
-      dotLen = 0;
+    ArrayList queue;
+    static final float TOLERANCE = 2.0f;
+
+    public Decoder() {
       hlPrev = false;
+      queue = new ArrayList();
     }
-    
+
     // decoding is highly adaptive, context-dependent and dynamic process.
-    void process(boolean hl) {
-      // TODO To be implemented.
-      if (!hlPrev && hl) {
-        // HIGH
-      } else if (hlPrev && !hl) {
-        // LOW
+    public String process(boolean isHigh) {
+
+      long now = System.currentTimeMillis();
+      if (!hlPrev && isHigh) {
+        // LOW to HIGH
+        if (downstrokeTime != 0)
+          queue.add(downstrokeTime - now); // blank dulation, negative value represents a marker.
+        upstrokeTime = now;
+      } else if (hlPrev && !isHigh) {
+        // HIGH to LOW
+        if (upstrokeTime != 0)
+          queue.add(now - upstrokeTime);
+        downstrokeTime = now;
       }
-      hlPrev = hl;
+      hlPrev = isHigh;
+      
+      int lastIndex = -1;
+
+      if (!isHigh && queue.size() >= 6) {
+        long minimum = (Long)queue.get(0);
+        long maximum = minimum;
+        for (int i = 1; i < queue.size(); i++) {
+          long d = (Long)queue.get(i);
+          if (d > 0) {
+            if (minimum > d)
+              minimum = d;
+            else if (maximum < d)
+              maximum = d;
+          }
+        }
+
+        
+        if (queue.size() > 6) {
+
+          long dotMax = (long)(minimum * TOLERANCE);
+          long dashMax = dotMax * 3;
+
+          for (int i = queue.size() - 1; i >= 0; i--) {
+            long d = (Long)queue.get(i);  
+            if (d < -dotMax) { // dash
+              lastIndex = i;
+              break;
+            }
+          }
+          
+          if (lastIndex >= 0) {
+            println("lastIndex:" + lastIndex);
+            
+            // convert to string
+            ArrayList tmp = new ArrayList();
+            String res = "";
+            for (int i = 0; i < lastIndex; i++) {
+              long d = (Long)queue.get(i);
+              if (d > 0 && d <= dotMax) {
+                tmp.add(1);
+              } else if (d > dotMax && d < dashMax) {
+                tmp.add(3);
+              }
+            }            
+            int[] array = new int[tmp.size()];
+            for (int j = 0; j < tmp.size(); j++) {
+              array[j] = (Integer)tmp.get(j);
+            }
+            char c = getCharacter(array);
+            if (c != 0)
+              res = String.valueOf(c);
+            println(res);
+
+            // remove processed result
+            do {
+              queue.remove(lastIndex);
+              lastIndex--;
+            } while (lastIndex >= 0);
+            
+            return res;
+          }
+        }        
+      }
+      return null;
     }
   }
 }
