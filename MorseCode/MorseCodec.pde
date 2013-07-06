@@ -224,7 +224,6 @@ static class MorseCodec {
     ArrayList c = new ArrayList();
     for (int i = 0; i < s.length(); i++) {
       char ch = s.charAt(i);
-      println(ch);
       int[] code = getPattern(ch);
       if (code == null)
         continue;
@@ -310,7 +309,6 @@ static class MorseCodec {
           }
 
           if (lastIndex >= 0) {
-            println("lastIndex:" + lastIndex);
 
             // convert to string
             ArrayList tmp = new ArrayList();
@@ -330,7 +328,6 @@ static class MorseCodec {
             char c = getCharacter(array);
             if (c != 0)
               res = String.valueOf(c);
-            println(res);
 
             // remove processed result
             do {
