@@ -3,6 +3,7 @@ import java.util.Map;
 import java.util.Iterator;
 
 static class MorseCodec {
+
   static final int[] A = {
     1, 3
   };
@@ -144,7 +145,7 @@ static class MorseCodec {
   static final int[] SPACE = {
     1, 1, 1, 1, 1, 1
   };
-  
+
   static HashMap dictionary;
 
   static void initializeDictionary() {
@@ -198,7 +199,7 @@ static class MorseCodec {
     dictionary.put(')', CLOSE_BLACKET);
     dictionary.put(' ', SPACE);
   }
-  
+
   static final char getCharacter(int[] a) {
     initializeDictionary();
     for (Iterator it = dictionary.entrySet().iterator(); it.hasNext();) {
@@ -258,8 +259,16 @@ static class MorseCodec {
       queue = new ArrayList();
     }
 
-    // decoding is highly adaptive, context-dependent and dynamic process.
+    /**
+     * Decode morse coded signal
+     *
+     * Application should call this method continuously.
+     *
+     * @param isHigh indicates whether the input signal is HIGH or LOW
+     * @return a string representation of decoded result, null otherwise.
+     */
     public String process(boolean isHigh) {
+      // decoding is highly adaptive, context-dependent and dynamic process.
 
       long now = System.currentTimeMillis();
       if (!hlPrev && isHigh) {
@@ -274,7 +283,7 @@ static class MorseCodec {
         downstrokeTime = now;
       }
       hlPrev = isHigh;
-      
+
       int lastIndex = -1;
 
       if (!isHigh && queue.size() >= 6) {
@@ -284,18 +293,14 @@ static class MorseCodec {
           long d = (Long)queue.get(i);
           if (d > 0) {
             if (minimum > d)
-              minimum = d;
-            else if (maximum < d)
+              minimum = d; else if (maximum < d)
               maximum = d;
           }
         }
 
-        
         if (queue.size() > 6) {
-
           long dotMax = (long)(minimum * TOLERANCE);
           long dashMax = dotMax * 3;
-
           for (int i = queue.size() - 1; i >= 0; i--) {
             long d = (Long)queue.get(i);  
             if (d < -dotMax) { // dash
@@ -303,10 +308,10 @@ static class MorseCodec {
               break;
             }
           }
-          
+
           if (lastIndex >= 0) {
             println("lastIndex:" + lastIndex);
-            
+
             // convert to string
             ArrayList tmp = new ArrayList();
             String res = "";
@@ -331,11 +336,12 @@ static class MorseCodec {
             do {
               queue.remove(lastIndex);
               lastIndex--;
-            } while (lastIndex >= 0);
-            
+            } 
+            while (lastIndex >= 0);
+
             return res;
           }
-        }        
+        }
       }
       return null;
     }
