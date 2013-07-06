@@ -236,7 +236,8 @@ const int* MorseCodec::getPattern(char c, size_t* length)
     return (*it).second.array;
 }
 
-vector<int> MorseCodec::encode(const std::string& str) {
+vector<int> MorseCodec::encode(const std::string& str)
+{
     string s(str);
     transform(s.begin(), s.end(), s.begin(), toupper);
     vector<int> c;
@@ -280,8 +281,8 @@ MorseCodec::Decoder::Decoder()
 {
 }
 
-string MorseCodec::Decoder::process(bool isHigh) {
-    
+string MorseCodec::Decoder::process(bool isHigh)
+{
     string res = "";
 
     int64_t now = currentTimeMillis();

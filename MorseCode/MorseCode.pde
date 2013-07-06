@@ -88,7 +88,7 @@ void draw() {
     text("Decoded result:" + decodedStr, 10, 45);
     
     int dt = now - lastTime;
-    if (dt > 80) {
+    if (dt > 100) {
       codesCounter = (codesCounter + 1) % codes.size();
       lastTime = now;
     }

@@ -242,10 +242,6 @@ static class MorseCodec {
     return c;
   }
 
-  static Decoder createDecoder() {
-    return new Decoder();
-  }
-
   static class Decoder {
     long upstrokeTime;
     long downstrokeTime;
