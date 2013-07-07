@@ -281,19 +281,20 @@ static class MorseCodec {
 
       int lastIndex = -1;
 
-      if (!isHigh && queue.size() >= 6) {
+      if (queue.size() >= 6) {
         long minimum = (Long)queue.get(0);
         long maximum = minimum;
         for (int i = 1; i < queue.size(); i++) {
           long d = (Long)queue.get(i);
           if (d > 0) {
             if (minimum > d)
-              minimum = d; else if (maximum < d)
+              minimum = d;
+             else if (maximum < d)
               maximum = d;
           }
         }
 
-        if (queue.size() > 6) {
+        if (maximum > minimum) {
           long dotMax = (long)(minimum * TOLERANCE);
           long dashMax = dotMax * 3;
           for (int i = queue.size() - 1; i >= 0; i--) {
