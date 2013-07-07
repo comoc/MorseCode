@@ -6,7 +6,7 @@ AudioOutput out;
 Oscillator osc;
 // } NOT ANDROID  
 
-static final String MESSAGE = "HELLO WORLD";
+static final String MESSAGE = "HELLO WORLD ";
 
 int charIndex = 0;
 int lastTime;

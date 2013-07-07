@@ -227,14 +227,16 @@ static class MorseCodec {
       int[] code = getPattern(ch);
       if (code == null)
         continue;
-      for (int j = 0; j < code.length; j++) {
-        int n = code[j];
-        for (int k = 0; k < n; k++) {
-          c.add(1);
-        } 
+      if (code.length > 0) {
+        for (int j = 0; j < code.length; j++) {
+          int n = code[j];
+          for (int k = 0; k < n; k++) {
+            c.add(1);
+          } 
+          c.add(0);
+        }
+      } else 
         c.add(0);
-      }
-      c.add(0);
       c.add(0);
       c.add(0);
     }
@@ -247,6 +249,8 @@ static class MorseCodec {
     long downstrokeTime;
     boolean hlPrev;
     ArrayList queue;
+    long minimum = 0;
+    long maximum = 0;    
     static final float TOLERANCE = 2.0f;
 
     public Decoder() {
@@ -282,15 +286,17 @@ static class MorseCodec {
       int lastIndex = -1;
 
       if (queue.size() >= 6) {
-        long minimum = (Long)queue.get(0);
-        long maximum = minimum;
         for (int i = 1; i < queue.size(); i++) {
           long d = (Long)queue.get(i);
           if (d > 0) {
-            if (minimum > d)
-              minimum = d;
-             else if (maximum < d)
-              maximum = d;
+            if (minimum == 0)
+              minimum = maximum = d;
+            else {
+              if (minimum > d)
+                minimum = (d + minimum) / 2;
+               else if (maximum < d)
+                maximum = (d + maximum) / 2;
+            }
           }
         }
 

@@ -247,14 +247,16 @@ vector<int> MorseCodec::encode(const std::string& str)
         const int* code = getPattern(ch, &len);
         if (code == 0)
             continue;
-        for (int j = 0; j < len; j++) {
-            int n = code[j];
-            for (int k = 0; k < n; k++) {
-                c.push_back(1);
-            } 
+        if (len > 0) {
+            for (int j = 0; j < len; j++) {
+                int n = code[j];
+                for (int k = 0; k < n; k++) {
+                    c.push_back(1);
+                } 
+                c.push_back(0);
+            }
+        } else
             c.push_back(0);
-        }
-        c.push_back(0);
         c.push_back(0);
         c.push_back(0);
     }
@@ -277,7 +279,7 @@ namespace
 const float MorseCodec::Decoder::TOLERANCE = 2.0f;
 
 MorseCodec::Decoder::Decoder()
-: upstrokeTime(0), downstrokeTime(0), hlPrev(false)
+: upstrokeTime(0), downstrokeTime(0), minimum(0), maximum(0), hlPrev(false)
 {
 }
 
@@ -302,15 +304,17 @@ string MorseCodec::Decoder::process(bool isHigh)
     int lastIndex = -1;
 
     if (queue.size() >= 6) {
-        int64_t minimum = (int64_t)queue.at(0);
-        int64_t maximum = minimum;
         for (int i = 1; i < queue.size(); i++) {
             int64_t d = (int64_t)queue.at(i);
             if (d > 0) {
-                if (minimum > d)
-                    minimum = d;
-                else if (maximum < d)
-                    maximum = d;
+                if (minimum == 0)
+                    minimum = maximum = d;
+                else {
+                    if (minimum > d)
+                        minimum = (d + minimum) / 2;
+                    else if (maximum < d)
+                        maximum = (d + maximum) / 2;
+                }
             }
         }
 

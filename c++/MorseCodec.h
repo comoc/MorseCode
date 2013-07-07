@@ -16,6 +16,8 @@ public:
     private:
         int64_t upstrokeTime;
         int64_t downstrokeTime;
+        int64_t minimum; 
+        int64_t maximum;
         bool hlPrev;
         std::vector<int64_t> queue;
         static const float TOLERANCE;

@@ -9,7 +9,7 @@ int main(void)
 {
     MorseCodec::Decoder dec;
 
-    vector<int> codes = MorseCodec::encode("HELLO WORLD");
+    vector<int> codes = MorseCodec::encode("HELLO WORLD ");
 
     // try to decode twice
     for (int i = 0; i < 2; i++) {
