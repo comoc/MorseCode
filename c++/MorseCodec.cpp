@@ -301,7 +301,7 @@ string MorseCodec::Decoder::process(bool isHigh)
 
     int lastIndex = -1;
 
-    if (!isHigh && queue.size() >= 6) {
+    if (queue.size() >= 6) {
         int64_t minimum = (int64_t)queue.at(0);
         int64_t maximum = minimum;
         for (int i = 1; i < queue.size(); i++) {
@@ -314,7 +314,7 @@ string MorseCodec::Decoder::process(bool isHigh)
             }
         }
 
-        if (queue.size() > 6) {
+        if (maximum > minimum) {
             int64_t dotMax = (int64_t)(minimum * TOLERANCE);
             int64_t dashMax = dotMax * 3;
             for (int i = queue.size() - 1; i >= 0; i--) {
@@ -341,7 +341,6 @@ string MorseCodec::Decoder::process(bool isHigh)
                 int j = 0;
                 for (list<int>::iterator it = tmp.begin(); it != tmp.end(); it++) {
                     array[j] = *it;
-                    it++;
                     j++;
                 }
                 char c = getCharacter(array, tmp.size());
