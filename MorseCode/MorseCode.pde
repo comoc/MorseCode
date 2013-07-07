@@ -6,7 +6,7 @@ AudioOutput out;
 Oscillator osc;
 // } NOT ANDROID  
 
-static final String MESSAGE = "HELLO WORLD ";
+static final String MESSAGE = "END ";
 
 int charIndex = 0;
 int lastTime;
@@ -88,7 +88,7 @@ void draw() {
     text("Decoded result:" + decodedStr, 10, 45);
     
     int dt = now - lastTime;
-    if (dt > 100) {
+    if (dt > 50) {
       codesCounter = (codesCounter + 1) % codes.size();
       lastTime = now;
     }

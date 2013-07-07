@@ -21,6 +21,7 @@ public:
         bool hlPrev;
         std::vector<int64_t> queue;
         static const float TOLERANCE;
+        static const int64_t MINIMUM_RESOLUTION;
 
     public:
         Decoder();

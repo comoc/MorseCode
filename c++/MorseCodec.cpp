@@ -277,6 +277,7 @@ namespace
 
 
 const float MorseCodec::Decoder::TOLERANCE = 2.0f;
+const int64_t MorseCodec::Decoder::MINIMUM_RESOLUTION = 16;
 
 MorseCodec::Decoder::Decoder()
 : upstrokeTime(0), downstrokeTime(0), minimum(0), maximum(0), hlPrev(false)
@@ -304,9 +305,9 @@ string MorseCodec::Decoder::process(bool isHigh)
     int lastIndex = -1;
 
     if (queue.size() >= 6) {
-        for (int i = 1; i < queue.size(); i++) {
+        for (int i = 0; i < queue.size(); i++) {
             int64_t d = (int64_t)queue.at(i);
-            if (d > 0) {
+            if (d > MINIMUM_RESOLUTION) {
                 if (minimum == 0)
                     minimum = maximum = d;
                 else {
@@ -321,7 +322,8 @@ string MorseCodec::Decoder::process(bool isHigh)
         if (maximum > minimum) {
             int64_t dotMax = (int64_t)(minimum * TOLERANCE);
             int64_t dashMax = dotMax * 3;
-            for (int i = queue.size() - 1; i >= 0; i--) {
+            ///for (int i = queue.size() - 1; i >= 0; i--) {
+            for (int i = 0; i < queue.size(); i++) {
                 int64_t d = (int64_t)queue.at(i);  
                 if (d < -dotMax) { // dash
                     lastIndex = i;

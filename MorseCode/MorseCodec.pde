@@ -252,7 +252,7 @@ static class MorseCodec {
     long minimum = 0;
     long maximum = 0;    
     static final float TOLERANCE = 2.0f;
-
+    static final long MINIMUM_RESOLUTION = 16;
     public Decoder() {
       hlPrev = false;
       queue = new ArrayList();
@@ -286,9 +286,9 @@ static class MorseCodec {
       int lastIndex = -1;
 
       if (queue.size() >= 6) {
-        for (int i = 1; i < queue.size(); i++) {
+        for (int i = 0; i < queue.size(); i++) {
           long d = (Long)queue.get(i);
-          if (d > 0) {
+          if (d > MINIMUM_RESOLUTION) {
             if (minimum == 0)
               minimum = maximum = d;
             else {
@@ -301,17 +301,21 @@ static class MorseCodec {
         }
 
         if (maximum > minimum) {
+          println("minimum:" + minimum);
           long dotMax = (long)(minimum * TOLERANCE);
           long dashMax = dotMax * 3;
-          for (int i = queue.size() - 1; i >= 0; i--) {
+          for (int i = 0; i < queue.size(); i++) {
             long d = (Long)queue.get(i);  
             if (d < -dotMax) { // dash
+              println("d:" + d);
               lastIndex = i;
               break;
             }
           }
 
           if (lastIndex >= 0) {
+
+            println("lastIndex:" + lastIndex);
 
             // convert to string
             ArrayList tmp = new ArrayList();
@@ -336,8 +340,7 @@ static class MorseCodec {
             do {
               queue.remove(lastIndex);
               lastIndex--;
-            } 
-            while (lastIndex >= 0);
+            } while (lastIndex >= 0);
 
             return res;
           }
