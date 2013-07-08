@@ -1,7 +1,7 @@
 MorseCodec
 ==========
 
-An encoder and decoder of the Morse code for C++ and Processing.
+An encoder and decoder of the [Morse code][1] for C++ and Processing.
 
 Note
 ----
@@ -13,3 +13,6 @@ Usage
 -----
 
 See c++/test.cpp
+
+
+[1]: http://en.wikipedia.org/wiki/Morse_code
