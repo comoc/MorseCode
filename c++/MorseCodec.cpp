@@ -235,11 +235,11 @@ void MorseCodec::initializeDictionary()
     dictionary.insert(pair<char, Entry>('&', Entry(AMPERSAND, sizeof(AMPERSAND)/sizeof(int))));
     dictionary.insert(pair<char, Entry>(':', Entry(COLON, sizeof(COLON)/sizeof(int))));
     dictionary.insert(pair<char, Entry>(';', Entry(SEMICOLON, sizeof(SEMICOLON)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>(';', Entry(DOUBLE_DASH, sizeof(DOUBLE_DASH)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>(';', Entry(PLUS, sizeof(PLUS)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>(';', Entry(UNDERSCODE, sizeof(UNDERSCODE)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>(';', Entry(QUOTATION_MARK, sizeof(QUOTATION_MARK)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>(';', Entry(DOLLAR_SIGN, sizeof(DOLLAR_SIGN)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('=', Entry(DOUBLE_DASH, sizeof(DOUBLE_DASH)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('+', Entry(PLUS, sizeof(PLUS)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('_', Entry(UNDERSCODE, sizeof(UNDERSCODE)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('"', Entry(QUOTATION_MARK, sizeof(QUOTATION_MARK)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('$', Entry(DOLLAR_SIGN, sizeof(DOLLAR_SIGN)/sizeof(int))));
 
     dictionary.insert(pair<char, Entry>(' ', Entry(SPACE, sizeof(SPACE)/sizeof(int))));
 }
