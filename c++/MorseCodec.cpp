@@ -291,35 +291,42 @@ string MorseCodec::Decoder::process(bool isHigh)
     int64_t now = currentTimeMillis();
     if (!hlPrev && isHigh) {
         // LOW to HIGH
-        if (downstrokeTime != 0)
-            queue.push_back(downstrokeTime - now); // blank dulation, negative value represents a marker.
+        if (downstrokeTime != 0) {
+            int64_t d = downstrokeTime - now;
+            if (d <= -MINIMUM_RESOLUTION)
+                queue.push_back(d); // blank dulation, negative value represents a marker.
+        }
         upstrokeTime = now;
     } else if (hlPrev && !isHigh) {
         // HIGH to LOW
-        if (upstrokeTime != 0)
-            queue.push_back(now - upstrokeTime);
+        if (upstrokeTime != 0) {
+            int64_t d = now - upstrokeTime;
+            if (d >= MINIMUM_RESOLUTION)
+                queue.push_back(d);
+        }
         downstrokeTime = now;
     }
     hlPrev = isHigh;
 
     int lastIndex = -1;
 
-    if (queue.size() >= 6) {
+    if (queue.size() >= 2) {
         for (int i = 0; i < queue.size(); i++) {
             int64_t d = (int64_t)queue.at(i);
-            if (d > MINIMUM_RESOLUTION) {
-                if (minimum == 0)
-                    minimum = maximum = d;
-                else {
-                    if (minimum > d)
-                        minimum = (d + minimum) / 2;
-                    else if (maximum < d)
-                        maximum = (d + maximum) / 2;
-                }
+            if (d < 0)
+                d = -d;
+            if (minimum == 0)
+                minimum = maximum = d;
+            else {
+                // moving average
+                if (minimum > d)
+                    minimum = (d + minimum) / 2;
+                else if (maximum < d)
+                    maximum = (d + maximum) / 2;
             }
         }
 
-        if (maximum > minimum) {
+        if (maximum >= minimum * 3) {
             int64_t dotMax = (int64_t)(minimum * TOLERANCE);
             int64_t dashMax = dotMax * 3;
             ///for (int i = queue.size() - 1; i >= 0; i--) {
