@@ -128,10 +128,13 @@ const int MorseCodec::PERIOD[] = {
 const int MorseCodec::COMMA[] = {
     3, 3, 1, 1, 3, 3
 };
-const int MorseCodec::QUESTION[] = {
+const int MorseCodec::QUESTION_MARK[] = {
     1, 1, 3, 3, 1, 1
 };
-const int MorseCodec::EXCLAMATION[] = {
+const int MorseCodec::APOSTROPHE[] = {
+    1, 3, 3, 3, 3, 1
+};
+const int MorseCodec::EXCLAMATION_MARK[] = {
     3, 1, 3, 1, 3, 3
 };
 const int MorseCodec::HYPHEN[] = {
@@ -140,14 +143,39 @@ const int MorseCodec::HYPHEN[] = {
 const int MorseCodec::SLASH[] = {
     3, 1, 1, 3, 1
 };
-const int MorseCodec::AT[] = {
+const int MorseCodec::AT_SIGN[] = {
     1, 3, 3, 1, 3, 1
 };
-const int MorseCodec::OPEN_BLACKET[] = {
+const int MorseCodec::PARENTHESIS_OPEN[] = {
     3, 1, 3, 3, 1
 };
-const int MorseCodec::CLOSE_BLACKET[] = {
+const int MorseCodec::PARENTHESIS_CLOSE[] = {
     3, 1, 3, 3, 1, 3
+};
+const int MorseCodec::AMPERSAND[] = {
+    1, 3, 1, 1, 1
+};
+
+const int MorseCodec::COLON[] = {
+    3, 3, 3, 1, 1, 1
+};
+const int MorseCodec::SEMICOLON[] = {
+    3, 1, 3, 1, 3, 1
+};
+const int MorseCodec::DOUBLE_DASH[] = {
+    3, 1, 1, 1, 3
+};
+const int MorseCodec::PLUS[] = {
+    1, 3, 1, 3, 1
+};
+const int MorseCodec::UNDERSCODE[] = {
+    1, 1, 3, 3, 1, 3
+};
+const int MorseCodec::QUOTATION_MARK[] = {
+    1, 3, 1, 1, 3, 1
+};
+const int MorseCodec::DOLLAR_SIGN[] = {
+    1, 1, 1, 3, 1, 1, 3
 };
 
 const int MorseCodec::SPACE[] = {
@@ -196,13 +224,23 @@ void MorseCodec::initializeDictionary()
     dictionary.insert(pair<char, Entry>('0', Entry(_0, sizeof(_0)/sizeof(int))));
     dictionary.insert(pair<char, Entry>('.', Entry(PERIOD, sizeof(PERIOD)/sizeof(int))));
     dictionary.insert(pair<char, Entry>(',', Entry(COMMA, sizeof(COMMA)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>('?', Entry(QUESTION, sizeof(QUESTION)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>('!', Entry(EXCLAMATION, sizeof(EXCLAMATION)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('?', Entry(QUESTION_MARK, sizeof(QUESTION_MARK)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('\'', Entry(APOSTROPHE, sizeof(APOSTROPHE)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('!', Entry(EXCLAMATION_MARK, sizeof(EXCLAMATION_MARK)/sizeof(int))));
     dictionary.insert(pair<char, Entry>('-', Entry(HYPHEN, sizeof(HYPHEN)/sizeof(int))));
     dictionary.insert(pair<char, Entry>('/', Entry(SLASH, sizeof(SLASH)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>('@', Entry(AT, sizeof(AT)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>('(', Entry(OPEN_BLACKET, sizeof(OPEN_BLACKET)/sizeof(int))));
-    dictionary.insert(pair<char, Entry>(')', Entry(CLOSE_BLACKET, sizeof(CLOSE_BLACKET)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('@', Entry(AT_SIGN, sizeof(AT_SIGN)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('(', Entry(PARENTHESIS_OPEN, sizeof(PARENTHESIS_OPEN)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(')', Entry(PARENTHESIS_CLOSE, sizeof(PARENTHESIS_CLOSE)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>('&', Entry(AMPERSAND, sizeof(AMPERSAND)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(':', Entry(COLON, sizeof(COLON)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(';', Entry(SEMICOLON, sizeof(SEMICOLON)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(';', Entry(DOUBLE_DASH, sizeof(DOUBLE_DASH)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(';', Entry(PLUS, sizeof(PLUS)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(';', Entry(UNDERSCODE, sizeof(UNDERSCODE)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(';', Entry(QUOTATION_MARK, sizeof(QUOTATION_MARK)/sizeof(int))));
+    dictionary.insert(pair<char, Entry>(';', Entry(DOLLAR_SIGN, sizeof(DOLLAR_SIGN)/sizeof(int))));
+
     dictionary.insert(pair<char, Entry>(' ', Entry(SPACE, sizeof(SPACE)/sizeof(int))));
 }
 

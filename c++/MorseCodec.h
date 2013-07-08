@@ -85,14 +85,23 @@ private:
 
     static const int PERIOD[];
     static const int COMMA[];
-    static const int QUESTION[];
-    static const int EXCLAMATION[];
+    static const int QUESTION_MARK[];
+    static const int APOSTROPHE[];
+    static const int EXCLAMATION_MARK[];
     static const int HYPHEN[];
     static const int SLASH[];
-    static const int AT[];
-    static const int OPEN_BLACKET[];
-    static const int CLOSE_BLACKET[];
-
+    static const int AT_SIGN[];
+    static const int PARENTHESIS_OPEN[];
+    static const int PARENTHESIS_CLOSE[];
+    static const int AMPERSAND[];
+    static const int COLON[];
+    static const int SEMICOLON[];
+    static const int DOUBLE_DASH[];
+    static const int PLUS[];
+    static const int UNDERSCODE[];
+    static const int QUOTATION_MARK[];
+    static const int DOLLAR_SIGN[];
+    
     static const int SPACE[];
 
     static std::map<char, Entry> dictionary;
