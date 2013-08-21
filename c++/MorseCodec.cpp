@@ -314,8 +314,10 @@ namespace
 }
 
 
-const float MorseCodec::Decoder::TOLERANCE = 2.0f;
-const int64_t MorseCodec::Decoder::MINIMUM_RESOLUTION = 16;
+//const float MorseCodec::Decoder::TOLERANCE = 2.0f;
+const float MorseCodec::Decoder::TOLERANCE = 2.5f;
+const int64_t MorseCodec::Decoder::MINIMUM_RESOLUTION = 8;
+const vector<int64_t>::size_type MorseCodec::Decoder::QUEUE_SIZE_MAX(1024);
 
 MorseCodec::Decoder::Decoder()
 : upstrokeTime(0), downstrokeTime(0), minimum(0), maximum(0), hlPrev(false)
@@ -331,16 +333,22 @@ string MorseCodec::Decoder::process(bool isHigh)
         // LOW to HIGH
         if (downstrokeTime != 0) {
             int64_t d = downstrokeTime - now;
-            if (d <= -MINIMUM_RESOLUTION)
+            if (d <= -MINIMUM_RESOLUTION) {
+                if (queue.size() >= QUEUE_SIZE_MAX)
+                    queue.clear();
                 queue.push_back(d); // blank dulation, negative value represents a marker.
+            }
         }
         upstrokeTime = now;
     } else if (hlPrev && !isHigh) {
         // HIGH to LOW
         if (upstrokeTime != 0) {
             int64_t d = now - upstrokeTime;
-            if (d >= MINIMUM_RESOLUTION)
+            if (d >= MINIMUM_RESOLUTION) {
+                if (queue.size() >= QUEUE_SIZE_MAX)
+                    queue.clear();
                 queue.push_back(d);
+            }
         }
         downstrokeTime = now;
     }

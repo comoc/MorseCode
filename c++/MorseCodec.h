@@ -22,7 +22,7 @@ public:
         std::vector<int64_t> queue;
         static const float TOLERANCE;
         static const int64_t MINIMUM_RESOLUTION;
-
+        static const std::vector<int64_t>::size_type QUEUE_SIZE_MAX;
     public:
         Decoder();
 
