@@ -1,8 +1,9 @@
 #include "MorseCodec.h"
 
+#include <cctype>
 #include <cstring>
 #include <algorithm>
-#include <cctype>
+#include <string>
 #include <list>
 
 #include <unistd.h>
@@ -359,16 +360,19 @@ string MorseCodec::Decoder::process(bool isHigh)
     if (queue.size() >= 2) {
         for (int i = 0; i < queue.size(); i++) {
             int64_t d = (int64_t)queue.at(i);
-            if (d < 0)
-                d = -d;
-            if (minimum == 0)
-                minimum = maximum = d;
-            else {
-                // moving average
-                if (minimum > d)
-                    minimum = (d + minimum) / 2;
-                else if (maximum < d)
-                    maximum = (d + maximum) / 2;
+            if (d > 0) {
+//            if (d < 0)
+//                d = -d;
+                if (minimum == 0) {
+                    minimum = maximum = d;
+                }
+                else {
+                    // 25% closer to the new value
+                    if (d < minimum)
+                        minimum = (d + minimum * 3) / 4;
+                    else if (d > maximum)
+                        maximum = (d + maximum * 3) / 4;
+                }
             }
         }
 
