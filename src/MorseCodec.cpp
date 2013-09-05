@@ -318,6 +318,7 @@ namespace
 //const float MorseCodec::Decoder::TOLERANCE = 2.0f;
 const float MorseCodec::Decoder::TOLERANCE = 2.5f;
 const int64_t MorseCodec::Decoder::MINIMUM_RESOLUTION = 8;
+const int64_t MorseCodec::Decoder::MAXIMUM_RESOLUTION = 500;
 const vector<int64_t>::size_type MorseCodec::Decoder::QUEUE_SIZE_MAX(1024);
 
 MorseCodec::Decoder::Decoder()
@@ -364,14 +365,30 @@ string MorseCodec::Decoder::process(bool isHigh)
 //            if (d < 0)
 //                d = -d;
                 if (minimum == 0) {
-                    minimum = maximum = d;
+//                    printf("<<< RESET 1 >>> %lld\n", minimum);
+                    minimum = d / 3;
+                    if (minimum == 0)
+                        minimum = MINIMUM_RESOLUTION;
+                    maximum = minimum * 3;
                 }
                 else {
-                    // 25% closer to the new value
                     if (d < minimum)
-                        minimum = (d + minimum * 3) / 4;
-                    else if (d > maximum)
-                        maximum = (d + maximum * 3) / 4;
+                        minimum = (d + minimum) / 2;
+                    else if (d > maximum) {
+                        maximum = (d + maximum) / 2;
+                        if (minimum > 0 && maximum > minimum * 4) {
+                            maximum = minimum * 4;
+                        }
+                    }
+                }
+            } else if (d < 0) {
+                if ((-d) > MAXIMUM_RESOLUTION * 3) {
+//                    printf("<<< RESET 2 >>> %lld, %lld\n", d, minimum);
+                    minimum = -d / 3;
+                    if (minimum == 0)
+                        minimum = MINIMUM_RESOLUTION;
+                    maximum = minimum * 3;
+                    
                 }
             }
         }
